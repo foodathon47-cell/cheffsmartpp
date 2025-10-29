@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Chef – Healthy Recipes</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #fffaf5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ffefdc;
+      text-align: center;
+      padding: 40px 20px;
+      color: #b35800;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      font-style: italic;
+      font-size: 1.2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .intro {
+      text-align: center;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .grocery-list {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .grocery-list h2 {
+      color: #b35800;
+      text-align: center;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    .recipes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #fff4e6;
+      border-radius: 10px;
+      padding: 15px 20px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card h3 {
+      color: #b35800;
+      margin-top: 0;
+      text-align: center;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      width: 90%;
+      border-radius: 10px;
+      max-height: 90%;
+      overflow-y: auto;
+    }
+
+    .close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #ffefdc;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #b35800;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Smart Chef 🍳</h1>
+    <p>This site will help you search for interesting recipes and choose healthier food.</p>
+  </header>
+
+  <main class="container">
+
+    <section class="intro">
+      <p>Here is an example of how it would look in the application. We have foods that we bring in and we are offered recipes.</p>
+    </section>
+
+    <section class="grocery-list">
+      <h2>🛒 Groceries</h2>
+      <ul>
+        <li>5 eggs</li>
+        <li>2 L of oil</li>
+        <li>1 L of milk</li>
+        <li>1 kg of baking powder</li>
+        <li>one chocolate</li>
+        <li>3 tomatoes (paradajza)</li>
+        <li>2 peppers + ketchup</li>
+        <li>tomato sauce (paradajz sos)</li>
+        <li>ajvar</li>
+        <li>cheese (sir)</li>
+        <li>500 g of sugar</li>
+        <li>500 ml of olive oil</li>
+      </ul>
+    </section>
+
+    <section class="recipe-section">
+      <h2>🍰 Recipes</h2>
+      <div class="recipes" id="recipeCards">
+        <!-- Recipe cards will be generated here by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal -->
+  <div id="recipeModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <p><strong>Health:</strong> <span id="modalHealth"></span></p>
+      <p><strong>Allergy:</strong> <span id="modalAllergy"></span></p>
+      <p><strong>Ingredients:</strong></p>
+      <ul id="modalIngredients"></ul>
+      <p><strong>Instructions:</strong></p>
+      <ol id="modalInstructions"></ol>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Smart Chef | Healthy Cooking for Everyone</p>
+  </footer>
+
+  <script>
+    const recipes = [
+      {
+        name: "Muffins",
+        health: "⭐⭐⭐",
+        allergy: "Milk, Eggs",
+        ingredients: ["2 eggs", "125 ml oil", "250 ml milk", "200g sugar", "400g flour", "1 tsp baking powder"],
+        instructions: ["Preheat oven to 185°C.", "Mix dry ingredients in a bowl.", "Add eggs, milk, and oil, mix until smooth.", "Fill paper molds and bake for 15 min."]
+      },
+      {
+        name: "Simple Chocolate Cake",
+        health: "⭐⭐",
+        allergy: "Milk, Eggs",
+        ingredients: ["2 eggs", "200 ml milk", "150g sugar", "100 ml oil", "1 tsp baking powder", "100g chocolate", "200g flour"],
+        instructions: ["Mix wet ingredients.", "Add dry ingredients and melted chocolate.", "Bake at 180°C for 25–30 min."]
+      },
+      {
+        name: "Pizza Dough",
+        health: "⭐⭐⭐",
+        allergy: "Gluten",
+        ingredients: ["1 spoon sugar", "1/2 packet fresh yeast", "3 tbsp olive oil", "1 tsp salt", "310g flour", "230 ml hot water"],
+        instructions: ["Dissolve yeast in warm water and sugar.", "Add olive oil and salt, mix.", "Pour into flour and knead dough.", "Let rest 10–15 min, divide into 4 parts, shape pizza."]
+      },
+      {
+        name: "Classic Tomato & Cheese Pizza",
+        health: "⭐⭐",
+        allergy: "Milk",
+        ingredients: ["Pizza dough", "2-3 tomatoes", "2 tbsp tomato sauce", "1 tbsp paprika ketchup", "1 tbsp olive oil", "100–150 g cheese", "salt", "pepper"],
+        instructions: ["Blend tomatoes, mix with sauce, ketchup, oil, salt, and pepper.", "Spread on rolled dough, add cheese.", "Bake at 220°C for 10–15 min."]
+      },
+      {
+        name: "Ajvar & Cheese Pizza",
+        health: "⭐⭐⭐",
+        allergy: "Milk",
+        ingredients: ["Pizza dough", "3 tbsp ajvar", "2 tbsp paprika ketchup", "1 tbsp olive oil", "100–150 g cheese", "optional tomato slices"],
+        instructions: ["Mix ajvar, ketchup, and oil.", "Spread on dough, top with cheese (and tomato slices).", "Bake at 220°C for 10–15 min."]
+      }
+    ];
+
+    const container = document.getElementById('recipeCards');
+    recipes.forEach((recipe, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${recipe.name}</h3>
+        <p><strong>Health:</strong> ${recipe.health}</p>
+        <p><strong>Allergy:</strong> ${recipe.allergy}</p>
+      `;
+      card.addEventListener('click', () => showModal(index));
+      container.appendChild(card);
+    });
+
+    const modal = document.getElementById("recipeModal");
+    const closeBtn = document.querySelector(".close");
+
+    function showModal(index) {
+      const recipe = recipes[index];
+      document.getElementById("modalTitle").innerText = recipe.name;
+      document.getElementById("modalHealth").innerText = recipe.health;
+      document.getElementById("modalAllergy").innerText = recipe.allergy;
+
+      const ingList = document.getElementById("modalIngredients");
+      ingList.innerHTML = "";
+      recipe.ingredients.forEach(i => {
+        const li = document.createElement("li");
+        li.textContent = i;
+        ingList.appendChild(li);
+      });
+
+      const instrList = document.getElementById("modalInstructions");
+      instrList.innerHTML = "";
+      recipe.instructions.forEach(i => {
+        const li = document.createElement("li");
+        li.textContent = i;
+        instrList.appendChild(li);
+      });
+
+      modal.style.display = "block";
+    }
+
+    closeBtn.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
